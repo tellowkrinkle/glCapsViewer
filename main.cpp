@@ -117,6 +117,12 @@ int main(int argc, char *argv[])
 
 	//Create a window and create its OpenGL context
 	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
 	capsViewer.window = glfwCreateWindow(320, 240, "glCapsViewer", NULL, NULL);
 
 	//If the window couldn't be created

@@ -156,7 +156,24 @@ string glCapsViewerCore::readOperatingSystem()
 		osinfo << osname.sysname << " " << osname.release << " (" << osname.machine << ")";
 		return osinfo.str();
 	#endif
-	// TODO : MacOSX
+	#ifdef __APPLE__
+		std::string name, version;
+		char dirTemplate[] = "/tmp/tmpdir.XXXXXX";
+		const char* dirName = mkdtemp(dirTemplate);
+		char fileName[256];
+		char cmd[1024];
+		snprintf(fileName, sizeof(fileName), "%s/ver.txt", dirName);
+		snprintf(cmd, sizeof(cmd), "sw_vers -productName > %s && sw_vers -productVersion >> %s", fileName, fileName);
+		system(cmd);
+		{
+			std::ifstream read(fileName);
+			std::getline(read, name);
+			std::getline(read, version);
+		}
+		unlink(fileName);
+		rmdir(dirName);
+		return name + " " + version;
+	#endif
 }
 
 void glCapsViewerCore::readExtensions()
